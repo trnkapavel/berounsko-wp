@@ -15,12 +15,6 @@ WordPress plugin pro rezervaci komentovaných vycházek v oblasti Berounska. Vlo
 - **Admin nastavení** – stránka v WP adminu pro e-mail, IBAN a Google Sheets URL
 - **Responzivní design** – funguje na mobilu, tabletu i desktopu
 
-## 📷 Náhled
-
-| Modal – výběr trasy | Modal – úspěšné odeslání |
-|---|---|
-| ![Modal formulář](screenshot/modal-form.png) | ![Modal úspěch](screenshot/modal-success.png) |
-
 ## 📋 Dostupné Vycházky
 
 | Trasa | Délka | Cena | Náročnost |

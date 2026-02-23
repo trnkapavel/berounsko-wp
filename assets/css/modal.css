@@ -68,6 +68,7 @@
     border-radius: 8px;
     box-shadow: 0 20px 50px rgba(0,0,0,0.3);
     font-family: var(--brez-font);
+    font-size: 16px;
     color: var(--brez-text);
     position: relative;
     transform: scale(0.95);
