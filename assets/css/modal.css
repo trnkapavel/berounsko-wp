@@ -1,0 +1,333 @@
+/* === Berounsko Rezervace Plugin === */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+
+/* --- ANIMACE --- */
+@keyframes brezFadeIn   { from { opacity: 0; } to { opacity: 1; } }
+@keyframes brezPopIn    {
+    0%   { transform: scale(0);   opacity: 0; }
+    70%  { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1);   opacity: 1; }
+}
+
+/* --- TRIGGER TLAČÍTKO --- */
+.brez-open-btn {
+    padding: 16px 40px;
+    font-size: 1.1em;
+    background-color: #30B0FF;
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: transform 0.3s, background-color 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.brez-open-btn:hover {
+    transform: scale(1.05) translateY(-2px);
+    background-color: #2090dd;
+}
+
+/* --- CSS PROMĚNNÉ --- */
+:root {
+    --brez-blue:   #30B0FF;
+    --brez-green:  #80C024;
+    --brez-orange: #FF9200;
+    --brez-red:    #FF4444;
+    --brez-text:   #000000;
+    --brez-font:   'Montserrat', sans-serif;
+}
+
+/* --- MODAL OVERLAY --- */
+.brez-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8);
+    z-index: 99999;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.brez-overlay.is-visible { opacity: 1; }
+
+/* --- MODAL OKNO --- */
+.brez-window {
+    background: #fff;
+    width: 90%;
+    max-width: 1000px;
+    height: 90vh;
+    display: flex;
+    flex-direction: row;
+    border-radius: 8px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    font-family: var(--brez-font);
+    color: var(--brez-text);
+    position: relative;
+    transform: scale(0.95);
+    opacity: 0;
+    transition: transform 0.3s, opacity 0.3s;
+    overflow: hidden;
+}
+.brez-overlay.is-visible .brez-window {
+    transform: scale(1);
+    opacity: 1;
+}
+
+/* --- LEVÁ STRANA (OBRÁZEK) --- */
+.brez-img {
+    flex: 1;
+    background-size: cover;
+    background-position: center;
+    min-height: 300px;
+    position: relative;
+    transition: opacity 0.2s ease;
+}
+.brez-img::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(to bottom, transparent 70%, rgba(0,0,0,0.6));
+}
+
+/* --- PRAVÁ STRANA --- */
+.brez-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+
+.brez-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 40px;
+    padding-bottom: 20px;
+}
+
+.brez-footer {
+    flex-shrink: 0;
+    padding: 20px 40px;
+    background: #fff;
+    border-top: 1px solid #f0f0f0;
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
+    z-index: 20;
+}
+
+.brez-view {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* --- ZAVÍRACÍ TLAČÍTKO --- */
+.brez-close {
+    position: absolute;
+    right: 20px; top: 15px;
+    font-size: 28px;
+    cursor: pointer;
+    color: #aaa;
+    z-index: 50;
+    background: rgba(255,255,255,0.8);
+    border-radius: 50%;
+    width: 40px; height: 40px;
+    text-align: center;
+    line-height: 40px;
+    border: none;
+}
+.brez-close:hover { color: var(--brez-red); background: #fff; }
+
+/* --- NADPIS --- */
+.brez-scroll h2 {
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: var(--brez-blue);
+    margin-top: 0;
+    font-family: var(--brez-font);
+}
+
+/* --- VÝBĚR TRASY --- */
+.brez-walk-selector {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+.brez-walk-btn {
+    padding: 8px 15px;
+    border: 2px solid #ddd;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9em;
+    background: #fff;
+    transition: all 0.3s;
+    font-family: var(--brez-font);
+}
+.brez-walk-btn.active {
+    border-color: var(--brez-orange);
+    background: var(--brez-orange);
+    color: #fff;
+    font-weight: 600;
+    transform: scale(1.05);
+}
+
+/* --- ROZBALOVACÍ TEXT --- */
+.brez-annotation ul { padding-left: 20px; margin-bottom: 5px; }
+.brez-annotation li { margin-bottom: 5px; font-size: 0.95em; line-height: 1.4; }
+
+.brez-hidden-content {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.4s ease, opacity 0.4s ease;
+}
+.brez-hidden-content.is-open { max-height: 500px; opacity: 1; }
+
+.brez-toggle-btn {
+    color: var(--brez-blue);
+    font-weight: 600;
+    font-size: 0.9em;
+    cursor: pointer;
+    display: inline-block;
+    margin-left: 20px;
+    margin-bottom: 20px;
+    text-decoration: underline;
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: var(--brez-font);
+}
+
+/* --- INFO ŘÁDEK --- */
+.brez-info-row {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border-left: 4px solid var(--brez-blue);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+.brez-info-item { display: flex; flex-direction: column; }
+.brez-info-label { font-weight: 400; font-size: 0.85em; color: #666; margin-bottom: 3px; }
+.brez-info-value { font-weight: 600; font-size: 1em; color: #000; }
+
+/* --- NÁROČNOST (PUNTÍKY) --- */
+.brez-diff-wrap { display: flex; gap: 4px; align-items: center; margin-top: 2px; }
+.brez-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background-color: #ddd;
+    transform: scale(0);
+}
+.brez-dot.animate        { animation: brezPopIn 0.3s forwards; }
+.brez-dot.active-green  { background-color: var(--brez-green); }
+.brez-dot.active-orange { background-color: var(--brez-orange); }
+.brez-dot.active-red    { background-color: var(--brez-red); }
+
+/* --- FORMULÁŘ --- */
+.brez-form-group { margin-bottom: 15px; }
+.brez-scroll label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 0.9em;
+    font-family: var(--brez-font);
+}
+.brez-scroll input[type="email"],
+.brez-scroll select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-family: var(--brez-font);
+    font-size: 1em;
+    background: #fafafa;
+    box-sizing: border-box;
+}
+
+/* --- CENA A TLAČÍTKO (FOOTER) --- */
+.brez-price {
+    font-size: 1.4em;
+    font-weight: 600;
+    color: var(--brez-green);
+    text-align: center;
+    margin-bottom: 15px;
+    font-family: var(--brez-font);
+}
+.brez-submit-btn {
+    background: var(--brez-blue);
+    color: #fff;
+    border: none;
+    padding: 15px;
+    width: 100%;
+    font-size: 1.1em;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
+    font-family: var(--brez-font);
+}
+.brez-submit-btn:hover    { background: #2090dd; }
+.brez-submit-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+/* --- SUCCESS STAV --- */
+.brez-success {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100%;
+    width: 100%;
+    padding: 40px;
+    font-family: var(--brez-font);
+}
+.brez-checkmark {
+    width: 80px; height: 80px;
+    position: relative;
+    display: inline-block;
+    border-radius: 50%;
+    border: 3px solid #80C024;
+    margin-bottom: 20px;
+    transform: scale(0);
+    opacity: 0;
+}
+.brez-success.is-active .brez-checkmark {
+    animation: brezPopIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+.brez-checkmark::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 25px; height: 13px;
+    border-left: 4px solid #80C024;
+    border-bottom: 4px solid #80C024;
+    transform: translate(-50%, -65%) rotate(-45deg);
+}
+.brez-success h3 { color: #80C024; font-size: 1.8em; margin: 0 0 10px 0; }
+.brez-success p  { font-size: 1em; color: #444; margin: 5px 0; }
+
+/* --- RESPONZIVITA --- */
+@media (max-width: 768px) {
+    .brez-window {
+        flex-direction: column;
+        width: 95%;
+        max-height: 95vh;
+    }
+    .brez-img {
+        height: 150px;
+        flex: none;
+    }
+    .brez-scroll  { padding: 20px; }
+    .brez-footer  { padding: 15px 20px; }
+    .brez-info-row { grid-template-columns: 1fr; }
+}
