@@ -80,6 +80,13 @@
     // --- INICIALIZACE (po načtení DOMu) ---
     document.addEventListener('DOMContentLoaded', function () {
 
+        // Přesun modalu přímo na <body>, aby position:fixed fungoval
+        // správně i při transform/filter na rodičovských elementech (WP témata)
+        const modal = document.getElementById('brezModal');
+        if (modal && modal.parentNode !== document.body) {
+            document.body.appendChild(modal);
+        }
+
         // Naplnění selectu počtu osob
         const sel = document.getElementById('brezParticipantCount');
         if (sel) {
