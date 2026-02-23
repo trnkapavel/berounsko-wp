@@ -3,7 +3,7 @@
  * Plugin Name: Berounsko Rezervace
  * Plugin URI:  https://github.com/trnkapavel/berounsko-wp
  * Description: Rezervační formulář pro komentované vycházky Berounsko.net. Vložte shortcode [berounsko_rezervace] nebo [berounsko_rezervace button_text="Rezervovat místo"].
- * Version:     1.0.0
+ * Version:     1.1.0
  * Author:      Pavel Trnka
  * License:     MIT
  * Text Domain: berounsko-rezervace
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'BREZ_VERSION', '1.0.0' );
+define( 'BREZ_VERSION', '1.1.0' );
 define( 'BREZ_PATH', plugin_dir_path( __FILE__ ) );
 define( 'BREZ_URL', plugin_dir_url( __FILE__ ) );
 
@@ -63,6 +63,9 @@ function brez_enqueue_assets() {
         'pluginUrl' => BREZ_URL,
     ] );
 }
+
+// --- SETTINGS ---
+require_once BREZ_PATH . 'includes/settings.php';
 
 // --- AJAX HANDLER ---
 require_once BREZ_PATH . 'includes/ajax-handler.php';
